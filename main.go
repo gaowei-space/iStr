@@ -19,7 +19,7 @@ func main() {
 	var toClipbordStr string
 	var toType int
 	var splitStr string
-	var itemToStr bool
+	var itemStr bool
 	var logLevel string
 
 	toTypeMap := map[int]string{
@@ -29,8 +29,8 @@ func main() {
 
 	flag.IntVar(&toType, "t", 1, "./iStr -t 1|2")
 	flag.StringVar(&splitStr, "s", ",", "./iStr -s ,")
-	flag.BoolVar(&itemToStr, "i", false, "./iStr -i")
-	flag.StringVar(&logLevel, "log-level", "info", "-log-level error")
+	flag.BoolVar(&itemStr, "i", false, "./iStr -i")
+	flag.StringVar(&logLevel, "log-level", "info", "./iStr -log-level error")
 	flag.Parse()
 
 	level, err := log.ParseLevel(logLevel)
@@ -41,7 +41,7 @@ func main() {
 
 	_, ok := toTypeMap[toType]
 	if !ok {
-		log.Fatalf("type 值输入异常，请输入1[多行转一行]或者2[一行转多行]")
+		log.Fatalf("-t 值输入异常，请输入1[多行转一行]或者2[一行转多行]")
 	}
 
 	if toType == 1 {
@@ -52,12 +52,20 @@ func main() {
 	mail
 	webhook
 	webhook`
-		if itemToStr {
-			fromClipbordStr = strings.ReplaceAll(fromClipbordStr, " ", "")
-			fromClipbordStr = strings.ReplaceAll(fromClipbordStr, "\n", fmt.Sprintf("\"%s\"", splitStr))
-			toClipbordStr = fmt.Sprintf("\"%s\"", fromClipbordStr)
+		arr := strings.Split(fromClipbordStr, "\n")
+		var parseArr []string
+		for i := 0; i < len(arr); i++ {
+			if len(arr[i]) == 0 {
+				continue
+			}
+			parseArr = append(parseArr, strings.TrimSpace(arr[i]))
+		}
+
+		if itemStr {
+			toClipbordStr = strings.Join(parseArr, fmt.Sprintf("\"%s\"", splitStr))
+			toClipbordStr = fmt.Sprintf("\"%s\"", toClipbordStr)
 		} else {
-			toClipbordStr = strings.ReplaceAll(fromClipbordStr, "\n", splitStr)
+			toClipbordStr = strings.Join(parseArr, splitStr)
 		}
 	} else {
 		fromClipbordStr = "slack,hello,ddd"
