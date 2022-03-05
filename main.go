@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/atotto/clipboard"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -44,14 +46,13 @@ func main() {
 		log.Fatalf("-t 值输入异常，请输入1[多行转一行]或者2[一行转多行]")
 	}
 
+	// 读取剪切板中的内容到字符串
+	fromClipbordStr, err = clipboard.ReadAll()
+	if err != nil {
+		log.Fatalf("读取剪贴板失败")
+	}
+
 	if toType == 1 {
-		fromClipbordStr = `
-	slack
-	slack
-	mail
-	mail
-	webhook
-	webhook`
 		arr := strings.Split(fromClipbordStr, "\n")
 		var parseArr []string
 		for i := 0; i < len(arr); i++ {
@@ -68,9 +69,10 @@ func main() {
 			toClipbordStr = strings.Join(parseArr, splitStr)
 		}
 	} else {
-		fromClipbordStr = "slack,hello,ddd"
 		toClipbordStr = strings.ReplaceAll(fromClipbordStr, splitStr, "\n")
 	}
 
-	fmt.Println(toClipbordStr)
+	// 复制内容到剪切板
+	clipboard.WriteAll(toClipbordStr)
+	fmt.Printf("\n`````````GET````````````\n%s\n\n````````````````````````\n", toClipbordStr)
 }
