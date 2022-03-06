@@ -26,7 +26,7 @@
 - `export GO111MODULE=on`
 - 编译 `make`
 - 使用
-    * iStr `./bin/iStr`
+    * `./bin/iStr`
 
 ### 开发
 `make build` 编译

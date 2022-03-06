@@ -23,7 +23,6 @@ _testmain.go
 .DS_Store
 .idea
 conf
-profile/*
 /bin
 /build
 
