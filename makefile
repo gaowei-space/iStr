@@ -10,11 +10,11 @@ test:
 
 .PHONY: package
 package:
-	bash ./package.sh
+	bash ./scripts/package.sh
 
 .PHONY: package-all
 package-all:
-	bash ./package.sh -p 'linux darwin windows'
+	bash ./scripts/package.sh -p 'linux darwin windows'
 
 .PHONY: lint
 lint:
