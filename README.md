@@ -31,8 +31,6 @@
 ### 开发
 `make build` 编译
 
-`make run` 编译并运行
-
 `make package` 打包
 > 生成当前系统的压缩包 iStr-v1.5-darwin-amd64.tar.gz
 
