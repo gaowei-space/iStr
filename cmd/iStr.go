@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/atotto/clipboard"
@@ -41,15 +42,19 @@ func main() {
 	}
 	log.SetLevel(level)
 
-	_, ok := toTypeMap[toType]
-	if !ok {
-		log.Fatalf("-t 值输入异常，请输入1[多行转一行]或者2[一行转多行]")
-	}
-
 	// 读取剪切板中的内容到字符串
 	fromClipbordStr, err = clipboard.ReadAll()
 	if err != nil {
 		log.Fatalf("读取剪贴板失败")
+	}
+
+	if fromClipbordStr == "" {
+		log.Fatalln("剪贴板内容为空")
+	}
+
+	_, ok := toTypeMap[toType]
+	if !ok {
+		log.Fatalln("-t 值输入异常，请输入1[多行转一行]或者2[一行转多行]")
 	}
 
 	if toType == 1 {
